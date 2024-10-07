@@ -1,0 +1,48 @@
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #10375C;
+  }
+  
+  .nav li {
+    float: left;
+  }
+  
+  .nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: large;
+
+    
+  }
+  .site-title {
+    display: block;
+    color: #EB8317;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size:xx-large;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bolder;
+}
+
+.nav input[type=text] {
+    float: right;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+  }
+  
+  
+  /* Change the link color to #111 (black) on hover */
+  .nav li a:hover {
+    background-color: #387478;
+  }
