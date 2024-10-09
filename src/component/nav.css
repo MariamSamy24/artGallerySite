@@ -14,29 +14,32 @@
     display: block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 16px 16px;
     text-decoration: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: large;
+    font-size: x-large;
 
     
   }
   .site-title {
     display: block;
-    color: #EB8317;
+    color: white;
+    background-color: #088395;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
     font-size:xx-large;
     font-family: "Times New Roman", Times, serif;
     font-weight: bolder;
+    margin-right: 20px;
+
 }
 
 .nav input[type=text] {
     float: right;
     padding: 6px;
     border: none;
-    margin-top: 8px;
+    margin-top: 14px;
     margin-right: 16px;
     font-size: 17px;
   }
@@ -44,5 +47,5 @@
   
   /* Change the link color to #111 (black) on hover */
   .nav li a:hover {
-    background-color: #387478;
+    color: #37B7C3;
   }
