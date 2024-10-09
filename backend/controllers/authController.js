@@ -1,10 +1,21 @@
 const User = require('../models/userModel');
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
   try {
+     const { name, email, password } = req.body;
+
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    const passwordError = validatePasswordStrength(password);
+    if (passwordError) {
+      return res.status(400).json({ message: passwordError });
+    }
+
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
@@ -16,6 +27,7 @@ exports.register = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -65,3 +77,30 @@ exports.token  = async (req, res) => {
       });
   });
 };
+
+
+function validatePasswordStrength(password) {
+  const minLength = 8;
+  const uppercase = /[A-Z]/;
+  const lowercase = /[a-z]/;
+  const number = /[0-9]/;
+  const specialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+  if (password.length < minLength) {
+    return `Password must be at least ${minLength} characters long`;
+  }
+  if (!uppercase.test(password)) {
+    return 'Password must contain at least one uppercase letter';
+  }
+  if (!lowercase.test(password)) {
+    return 'Password must contain at least one lowercase letter';
+  }
+  if (!number.test(password)) {
+    return 'Password must contain at least one number';
+  }
+  if (!specialChar.test(password)) {
+    return 'Password must contain at least one special character';
+  }
+
+  return null;
+}

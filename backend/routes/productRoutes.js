@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', productController.getAllProducts);
 router.get('/search', productController.searchProducts);
 router.get('/:id', productController.getProductById);
-router.post('/', authMiddleware, authorizeRoles('admin'),uploadImage.single('image'), productController.createProduct);
+router.post('/', authMiddleware,authorizeRoles('admin'),uploadImage.single('image'), productController.createProduct);
 router.put('/:id',authMiddleware,authorizeRoles('admin'),uploadImage.single('image') ,productController.updateProduct);
 router.delete('/:id',authMiddleware, authorizeRoles('admin'), productController.deleteProduct);
 

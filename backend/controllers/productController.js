@@ -26,14 +26,24 @@ const validateProduct = [
 exports.getAllProducts = async (req, res) => {
   const baseUrl = `${req.protocol}://${req.get('host')}`;
   try {
-    const products = await Product.getAll();
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 100; 
+    const offset = (page - 1) * limit;
+
+    const { products, total } = await Product.getAll(limit, offset);
     const productsWithImageUrl = products.map(product => {
       return {
         ...product,
         imageUrl: product.image ? `${baseUrl}/${product.image}` : null
       };
     });
-    res.json(productsWithImageUrl);
+    res.json({
+      products: productsWithImageUrl,
+      page, 
+      totalPages: Math.ceil(total / limit), 
+      totalProducts: total 
+    });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   };
@@ -66,7 +76,10 @@ exports.getAllProducts = async (req, res) => {
 exports.createProduct = [validateProduct ,async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({
+       message: "Product validation failed. Please correct the errors and try again.", 
+       errors: errors.array() 
+      });
   }
 
   const { title, short_description, description, price, category, stock } = req.body;
@@ -94,7 +107,10 @@ exports.updateProduct = [validateProduct, async (req, res) => {
   
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ 
+           message: "Product validation failed. Please correct the errors and try again.",
+          errors: errors.array() 
+        });
       }
 
       await Product.update(id, title, short_description, description, price, category, stock, image || product.image);
@@ -124,11 +140,14 @@ exports.updateProduct = [validateProduct, async (req, res) => {
 
   exports.searchProducts = async (req, res) => {
     try {
-      const { q, category, minPrice, maxPrice } = req.query; 
+      const { q, category, minprice, maxprice } = req.query; 
+      const page = parseInt(req.query.page) || 1; 
+      const limit = parseInt(req.query.limit) || 100; 
+      const offset = (page - 1) * limit;
+  
       const baseUrl = `${req.protocol}://${req.get('host')}`;
 
-      const products = await Product.searchProducts(q || '', category, minPrice, maxPrice);
-
+      const { products, total } = await Product.searchProducts(q || '', category, minprice, maxprice,limit, offset);
       const productsWithImageUrl = products.map(product => {
         return {
           ...product,
@@ -136,7 +155,13 @@ exports.updateProduct = [validateProduct, async (req, res) => {
         };
       });
 
-      res.json(productsWithImageUrl);
+      res.json({
+        products: productsWithImageUrl,
+        page, 
+        totalPages: Math.ceil(total / limit), 
+        totalProducts: total 
+      });
+
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
