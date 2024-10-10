@@ -1,4 +1,5 @@
 const Product = require('../models/productModel');
+const Category = require('../models/categoryModel');
 const { body, validationResult } = require('express-validator');
 
 
@@ -16,7 +17,7 @@ const validateProduct = [
     .custom((value) => value > 0).withMessage('Price must be greater than zero.'),
     body('category')
     .notEmpty().withMessage('Category is required.')
-    .isIn(['painting', 'sculpture', 'photography']).withMessage('Category must be one of: painting, sculpture, photography.'),
+    .isIn(Category.getCategories()).withMessage(`Category must be one of:  ${Category.getCategories().join(', ')}.`),
   body('stock')
     .isNumeric().withMessage('Stock must be a number.')
     .custom((value) => value >= 0).withMessage('Stock must be greater than or equal to zero.')
@@ -37,7 +38,7 @@ exports.getAllProducts = async (req, res) => {
         imageUrl: product.image ? `${baseUrl}/${product.image}` : null
       };
     });
-    res.json({
+    res.status(200).json({
       products: productsWithImageUrl,
       page, 
       totalPages: Math.ceil(total / limit), 
@@ -65,7 +66,7 @@ exports.getAllProducts = async (req, res) => {
         imageUrl: product.image ? `${baseUrl}/${product.image}` : null
       };
   
-      res.json(productWithImageUrl);
+      res.status(200).json(productWithImageUrl);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -95,11 +96,11 @@ exports.createProduct = [validateProduct ,async (req, res) => {
 
 
 exports.updateProduct = [validateProduct, async (req, res) => {
-    const { id } = req.params; 
-    const { title, short_description, description, price, category, stock } = req.body;
-    const image = req.file ? req.file.path : null; 
-
-    try {
+  try { 
+      const { id } = req.params; 
+      const { title, short_description, description, price, category, stock } = req.body;
+      const image = req.file ? req.file.path : null; 
+   
       const product = await Product.getById(id);
       if (!product) {
         return res.status(404).json({ message: 'Product not found' });
@@ -122,9 +123,8 @@ exports.updateProduct = [validateProduct, async (req, res) => {
   }];
   
   exports.deleteProduct = async (req, res) => {
-    const { id } = req.params; 
-  
     try {
+      const { id } = req.params; 
       const product = await Product.getById(id);
       if (!product) {
         return res.status(404).json({ message: 'Product not found' });
@@ -155,7 +155,7 @@ exports.updateProduct = [validateProduct, async (req, res) => {
         };
       });
 
-      res.json({
+      res.status(200).json({
         products: productsWithImageUrl,
         page, 
         totalPages: Math.ceil(total / limit), 
