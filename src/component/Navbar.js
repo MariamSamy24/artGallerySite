@@ -1,25 +1,30 @@
+
+import { Outlet, Link } from "react-router-dom";
 export default function Navbar(){
 
     return <nav className="nav">
-        <a href="/" className="site-title">ART GALLERY</a>
-        <ul>
         
+        <ul>
+        <li className="site-title">
+        ART GALLERY
+        </li>
             <li>
-                <a href="/availables">Product listing</a>
+                <Link to="home">Home</Link>
                 </li>
                 <li>
-                <a href="/details">Product details </a>
+                <Link to="shop">Shop </Link>
 
             </li>
             <li>
-                <a href="/history">Order History</a>
-            </li>
-            <li>
-                <a href="/checkout">Check out</a>
+                <Link to="checkout">Check out</Link>
             </li>
             <input type="text" placeholder="Search.."></input>
         </ul>
         
         
     </nav>
+
 }
+
+
+

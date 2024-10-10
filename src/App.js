@@ -2,8 +2,10 @@
 // import './App.css';
 
 import Navbar from "./component/Navbar.js";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
+
+function App() { 
   return (
     // <div className="App">
     //   <header className="App-header">
