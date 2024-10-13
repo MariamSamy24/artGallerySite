@@ -14,10 +14,8 @@ exports.getAllOrders = async (req, res) => {
 
 exports.searchOrders = async (req, res) => {
   try {
-    console.log("ff" + req);
     const {  order_id, customer_name} = req.query; 
    
-    console.log("c " +customer_name+ "id " + order_id);
     const orders = await Order.searchOrders(order_id, customer_name);
 
     res.json({orders});

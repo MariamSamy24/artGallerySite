@@ -29,8 +29,7 @@ class Order {
  
 
   static async searchOrders(id, customer_name) {
-    console.log(customer_name +" fff "+ id);
-    let sql = "SELECT * FROM orders inner join users on users.id = orders.user_id where users.name like ? ";
+    let sql = "SELECT orders.*, users.name , users.email  FROM orders inner join users on users.id = orders.user_id where users.name like ? ";
     const params = [`%${customer_name}%`];
 
     if (id) {
