@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageSlider from "../component/ImageSlider.js";
 
-export default function Home(){
+export default function HomePage(){
 
     // return <h1>Hellobhjbhbjhbhjbhjbjhbbbjhb</h1>
     const images = [
