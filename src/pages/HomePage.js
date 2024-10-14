@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageSlider from "../component/ImageSlider.js";
+import ProductPage from './product/ProductPage.js';
 
 export default function HomePage(){
 
@@ -22,7 +23,9 @@ export default function HomePage(){
         //   </div>
         // </section>
         <div>
-        <ImageSlider images={images} />
+           <ImageSlider images={images} />
+           <ProductPage/>
+
       </div>
       );
 }
