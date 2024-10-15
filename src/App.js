@@ -6,6 +6,7 @@ import CheckoutPage from './pages/CheckoutPage.js';
 import HomePage from './pages/HomePage.js'; 
 import LoginPage from './pages/login/LoginPage.js'
 import RegisterPage from "./pages/register/RegisterPage.js";
+import CartPage from "./pages/Cart/CartPage.js";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage/>} />
+          <Route path="cart" element={<CartPage/>} />
       </Routes>
      
 

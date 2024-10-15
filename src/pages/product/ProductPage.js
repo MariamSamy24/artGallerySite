@@ -9,12 +9,17 @@ function ProductPage() {
   const [maxPrice, setMaxPrice] = useState(5000);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
 
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
   const apiUrl = process.env.REACT_APP_API_URL;
+  
 
   // Fetch categories for category filter
   const fetchCategories = async () => {
@@ -55,8 +60,12 @@ function ProductPage() {
     fetchProducts(); 
   }, [searchQuery, minPrice, maxPrice, currentPage, selectedCategory]);
 
+ 
+
   const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
+    const updatedCart = [...cart, product];
+    setCart(updatedCart);
+    localStorage.setItem('cart', JSON.stringify(updatedCart)); 
     alert(`${product.title} added to the cart!`);
   };
 
