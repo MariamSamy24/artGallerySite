@@ -60,7 +60,17 @@ exports.getByUserId = async (req, res) => {
   };
   
 
-
+  exports.createOrder = async (req, res) => {
+    try {
+      const { ordersDetails} = req.body; 
+      const user_id =  req.user.id
+      const orders = await Order.createOrder(ordersDetails, user_id);
+  
+      res.status(201).json("Order Created successfully");
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
 
 
 

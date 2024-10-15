@@ -40,8 +40,23 @@ class Order {
     const [rows] = await db.execute(sql, params);
     return rows;
   }
-}
 
+
+  static async createOrder(ordersDetails, user_id){
+    let total  = 0;
+    for(var i=0; i < ordersDetails.length; i++){
+        total += (ordersDetails[i].price * ordersDetails[i].quantity);
+    }
+
+    let orderSql = "insert into orders(user_id,order_date,total_amount , status) values(? , ? , ? , 'pending')"
+    let resultOrder = await db.execute(orderSql, [user_id , Date.now(), total]);
+  
+    for(var i=0; i < ordersDetails.length; i++){
+      let orderDetailsSql = "insert into order_details (order_id,product_id, quantity,price) values(? , ? , ? , ?)"
+      let resultOrderDetails = await db.execute(orderDetailsSql, [resultOrder.id , ordersDetails[i].product_id, ordersDetails[i].quantity, ordersDetails[i].price]);
+    }
+  }
+}
 
 
 module.exports = Order;

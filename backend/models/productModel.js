@@ -48,12 +48,12 @@ class Product {
           queryParams.push(category);
         }
       
-        if (minPrice !== undefined) {
+        if (minPrice >0) {
           query += " AND price >= ?";
           queryParams.push(Number(minPrice));  
         }
       
-        if (maxPrice !== undefined) {
+        if (maxPrice >0) {
           query += " AND price <= ?";
           queryParams.push(Number(maxPrice)); 
         }
