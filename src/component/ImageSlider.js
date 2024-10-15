@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './ImageSlider.css';
 
+
 function ImageSlider({ images }) {
+  console.log(images)
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ function ImageSlider({ images }) {
           <div
             key={index}
             className={`slide ${index === currentSlide ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${image})` }}
+            style={{ backgroundImage: `url(${image.imgPath})` }}
           ></div>
         ))}
       </div>

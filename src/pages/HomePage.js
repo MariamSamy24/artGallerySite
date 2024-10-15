@@ -7,10 +7,10 @@ export default function HomePage(){
     // return <h1>Hellobhjbhbjhbhjbhjbjhbbbjhb</h1>
     const images = [
         {
-            imgPath:"https://in.pinterest.com/pin/acrylic-panting-sunlight-scenery-panting-in-2023--301319031333624216/",
+            imgPath:"https://as1.ftcdn.net/v2/jpg/02/73/22/74/1000_F_273227473_N0WRQuX3uZCJJxlHKYZF44uaJAkh2xLG.jpg",
         },
         {
-           imgPath :" https://in.pinterest.com/pin/814236807605337234/",
+           imgPath :"https://as1.ftcdn.net/v2/jpg/02/69/00/62/1000_F_269006287_UOjqqlydfZpqlXB4tSxLZGXI0MXhHytb.jpg",
         },
         // Add more images here
       ];
