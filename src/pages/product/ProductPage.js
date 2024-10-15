@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProductPage.css';
+import AddToCartButton from '../../component/AddToCartButton'
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -12,11 +13,6 @@ function ProductPage() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
 
   const apiUrl = process.env.REACT_APP_API_URL;
   
@@ -62,14 +58,6 @@ function ProductPage() {
 
  
 
-  const addToCart = (product) => {
-    const updatedCart = [...cart, product];
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart)); 
-    alert(`${product.title} added to the cart!`);
-  };
-
-
   const renderProducts = () => {
     if (products.length === 0) {
       return <p>No products found</p>;
@@ -80,7 +68,7 @@ function ProductPage() {
         <h3>{product.title}</h3>
         <p>{product.short_description}</p>
         <p>Price: ${product.price}</p>
-        <button onClick={() => addToCart(product)}>Add to Cart</button>
+        <AddToCartButton product={product} />
       </div>
     ));
   };
