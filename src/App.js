@@ -1,9 +1,9 @@
 // import logo from './logo.svg';
 // import './App.css';
 
-import Navbar from "./component/Navbar.js";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+// import Navbar from "./component/Navbar.js";
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./component/Login.js";
 
 function App() { 
   return (
@@ -15,7 +15,8 @@ function App() {
     // </div>
 
 
-    <Navbar />
+    // <Navbar />
+    <Login />
   );
 }
 
