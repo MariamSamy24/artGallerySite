@@ -1,9 +1,10 @@
 // import logo from './logo.svg';
-// import './App.css';
+import './App.css';
 
 // import Navbar from "./component/Navbar.js";
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./component/Login.js";
+// import Login from "./component/Login.js";
+import OrderHistory from './component/OrderHistory'
 
 function App() { 
   return (
@@ -16,7 +17,8 @@ function App() {
 
 
     // <Navbar />
-    <Login />
+    // <Login />
+    <OrderHistory />
   );
 }
 
