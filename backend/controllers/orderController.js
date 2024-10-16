@@ -26,8 +26,10 @@ exports.searchOrders = async (req, res) => {
 
 
 exports.getByUserId = async (req, res) => {
-  const { user_id } = req.params;
-
+  let { user_id } = req.params;
+  if(user_id == null || user_id === ""){
+      user_id =  req.user.id
+  }
   try {
     const orders = await Order.getAllByUserId(user_id );
     if (!orders) {
@@ -62,9 +64,9 @@ exports.getByUserId = async (req, res) => {
 
   exports.createOrder = async (req, res) => {
     try {
-      const { ordersDetails} = req.body; 
+      const { ordersDetails, user_Address, user_Telephone, payment_type} = req.body; 
       const user_id =  req.user.id
-      const orders = await Order.createOrder(ordersDetails, user_id);
+      const orders = await Order.createOrder(ordersDetails, user_id, user_Address, user_Telephone, payment_type);
   
       res.status(201).json("Order Created successfully");
     } catch (err) {
