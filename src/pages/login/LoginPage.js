@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './LoginPage.css';
+import { toast } from 'react-toastify';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ function LoginPage() {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        alert('Login successful!'); 
+        toast.success("Login successful!");
       } else {
         setError(response.data.message);
       }
