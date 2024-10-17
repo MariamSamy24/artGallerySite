@@ -25,6 +25,7 @@ function ImageSlider({ images }) {
   return (
     <div className="image-slider">
       <button onClick={handlePrevSlide}>Prev</button>
+      <button onClick={handleNextSlide}>Next</button>
       <div className="slider-container">
         {images.map((image, index) => (
           <div
@@ -34,7 +35,6 @@ function ImageSlider({ images }) {
           ></div>
         ))}
       </div>
-      <button onClick={handleNextSlide}>Next</button>
     </div>
   );
 }
