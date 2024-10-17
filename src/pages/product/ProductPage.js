@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ProductPage.css';
-import AddToCartButton from '../../component/AddToCartButton'
+import AddToCartButton from '../../component/AddToCartButton';
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -15,9 +15,7 @@ function ProductPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const apiUrl = process.env.REACT_APP_API_URL;
-  
 
-  // Fetch categories for category filter
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/categories`);
@@ -53,10 +51,10 @@ function ProductPage() {
 
   useEffect(() => {
     fetchCategories();
-    fetchProducts(); 
+    fetchProducts();
   }, [searchQuery, minPrice, maxPrice, currentPage, selectedCategory]);
 
- 
+
 
   const renderProducts = () => {
     if (products.length === 0) {
@@ -86,7 +84,6 @@ function ProductPage() {
           Previous
         </button>
 
-        {/* Page numbers */}
         {[...Array(totalPages)].map((x, i) => (
           <button
             key={i}
@@ -109,35 +106,70 @@ function ProductPage() {
   };
 
   return (
+    <div>
     <div className="product-page">
-      <h1>Products</h1>
-
       <div className="filter-section">
-        <input type="text" placeholder="Search..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        <input className='search'
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
 
-        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="category-filter" >
-          <option value="">All Categories</option>
+        <div className="category-filter">
+          <h4>Category</h4>
+          <label className="category-item">
+            <input
+              type="radio"
+              value=""
+              checked={selectedCategory === ''}
+              onChange={() => setSelectedCategory('')}
+            />
+            All Categories
+          </label>
           {categories.map((category, index) => (
-            <option key={index} value={category}>
+            <label key={index} className="category-option">
+              <input
+                type="radio"
+                name="category"
+                value={category}
+                checked={selectedCategory === category}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              />
               {category}
-            </option>
+            </label>
           ))}
-        </select>
+        </div>
 
         <div className="price-filter">
-          <label>Price Range:</label>
+          <h4>Price Range</h4>
           <div className="price-slider-container">
-            <div className="range-bar"
+            <div
+              className="range-bar"
               style={{
                 left: `${(minPrice / 5000) * 100}%`,
                 width: `${((maxPrice - minPrice) / 5000) * 100}%`,
-              }}>
-            </div>
-            <input type="range" className="price-slider" min="0" max="5000"
-              value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
-            <input type="range" className="price-slider" min="0" max="5000"  value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)} />
+              }}
+            ></div>
+
+            <input
+              type="range"
+              className="price-slider"
+              min="0"
+              max="5000"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+            <input
+              type="range"
+              className="price-slider"
+              min="0"
+              max="5000"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
           </div>
+
           <div className="price-range-values">
             <span>Min: ${minPrice}</span>
             <span>Max: ${maxPrice}</span>
@@ -145,11 +177,13 @@ function ProductPage() {
         </div>
       </div>
 
-      {renderLoading()}
+      <div className="product-list">
+        {renderLoading()}
+        {renderProducts()}
+      </div>
+    </div>
+    {renderPagination()}
 
-      <div className="product-list">{renderProducts()}</div>
-
-      {renderPagination()}
     </div>
   );
 }
