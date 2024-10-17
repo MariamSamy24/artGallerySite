@@ -9,16 +9,15 @@ import RegisterPage from "./pages/register/RegisterPage.js";
 import CartPage from "./pages/Cart/CartPage.js";
 
 import { Routes, Route } from "react-router-dom";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+import { CartProvider } from './context/CartContext';
 
 function App() { 
   return (
    
-
-<>
-
+<CartProvider>
 <Navbar />
-
 <Routes>
         
           <Route index element={<HomePage />} />
@@ -30,10 +29,8 @@ function App() {
           <Route path="cart" element={<CartPage/>} />
       </Routes>
      
-
-</>
-
-  
+      <ToastContainer />
+</CartProvider> 
     
   );
 }

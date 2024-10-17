@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
+import { CartContext } from '../context/CartContext'; // Import the context
+import { toast } from 'react-toastify';
 
 const AddToCartButton = ({ product }) => {
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const { addToCart } = useContext(CartContext); // Get addToCart function from context
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  const addToCart = () => {
-    const updatedCart = [...cart, product];
-    setCart(updatedCart);
-    alert(`${product.title} added to the cart!`);
+  const handleAddToCart = () => {
+    addToCart(product);
+    toast.success(`${product.title} has been added to your cart!`);
   };
 
   return (
     <button 
-      onClick={addToCart} 
+      onClick={handleAddToCart} 
       disabled={product.stock === 0} 
       style={{
-        borderRadius:'10px',
+        borderRadius: '10px',
         color: 'white',
-        padding:'10px',
-        backgroundColor: product.stock === 0 ? 'grey' : '#088395', 
-        cursor: product.stock === 0 ? 'not-allowed' : 'pointer'
+        padding: '10px',
+        backgroundColor: product.stock === 0 ? 'grey' : '#088395',
+        cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
       }}
     >
       {product.stock === 0 ? 'Sold Out' : 'Add to Cart'}
