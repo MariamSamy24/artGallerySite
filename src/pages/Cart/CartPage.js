@@ -3,15 +3,12 @@ import { CartContext } from '../../context/CartContext';
 import './CartPage.css';
 
 function CartPage() {
-  // Access global cart, updateCartQuantity, and removeFromCart from CartContext
   const { cart, updateCartQuantity, removeFromCart, clearCart } = useContext(CartContext);
 
-  // Calculate total price
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
-  // Render cart items
   const renderCartItems = () => {
     if (cart.length === 0) {
       return <p>Your cart is empty</p>;
@@ -28,16 +25,15 @@ function CartPage() {
         </div>
 
         <div className="quantity-control">
-          {/* Decrease and Increase quantity buttons */}
-          <button onClick={() => updateCartQuantity(product.id, product.quantity - 1)}>-</button>
+          <button onClick={() => updateCartQuantity(product.id, product.quantity - 1)}
+            disabled={product.quantity === 1}>-</button>
           <span>{product.quantity}</span>
-          <button onClick={() => updateCartQuantity(product.id, product.quantity + 1)}>+</button>
+          <button onClick={() => updateCartQuantity(product.id, product.quantity + 1)}
+             disabled={product.quantity >= product.stock}>+</button>
         </div>
 
-        {/* Total for each product */}
         <p>Total: ${(product.price * product.quantity).toFixed(2)}</p>
 
-        {/* Remove item from cart */}
         <button className="remove-btn" onClick={() => removeFromCart(product.id)}>
           Remove
         </button>
