@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage.js';
 import LoginPage from './pages/login/LoginPage.js'
 import RegisterPage from "./pages/register/RegisterPage.js";
 import CartPage from "./pages/Cart/CartPage.js";
-
+import OrderHistory from "./component/OrderHistory.js"
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
@@ -27,6 +27,7 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage/>} />
           <Route path="cart" element={<CartPage/>} />
+          <Route path="order" element={<OrderHistory/>} />
       </Routes>
      
       <ToastContainer />
