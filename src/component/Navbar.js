@@ -30,6 +30,9 @@ const Navbar = () => {
                     <li>
                         <Link to="/login">Login</Link>
                     </li>
+                    <li>
+                        <Link to="/order">OrderHistory</Link>
+                    </li>
                 </ul>
                 <div className="navbar-actions">
                     <input type="text" placeholder="Search..." className="navbar-search" />
