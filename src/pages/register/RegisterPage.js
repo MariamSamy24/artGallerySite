@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './RegisterPage.css';
 import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function RegisterPage() {
   const [name, setName] = useState('');
@@ -20,7 +21,7 @@ function RegisterPage() {
       const response = await axios.post(apiUrl +'/api/register', { name, email, password });
       debugger
       if (response.status === 201) {
-        alert(response.data.message); 
+        toast.success(response.data.message);
         setRedirectToLogin(true);
       } else {
         setError(response.data.message);
