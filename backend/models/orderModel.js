@@ -40,8 +40,34 @@ class Order {
     const [rows] = await db.execute(sql, params);
     return rows;
   }
-}
 
+
+  static async createOrder(ordersDetails, user_id, user_Address, user_Telephone, payment_type){
+    let total  = 0;
+    for(var i=0; i < ordersDetails.length; i++){
+        total += (ordersDetails[i].price * ordersDetails[i].quantity);
+    }
+
+    try{
+
+      let orderSql = "insert into orders(user_id,order_date,total_amount , status, user_Address, user_Telephone, payment_type) values(? , ? , ? , 'pending', ? , ? , ?)"
+      let [resultOrder] = await db.execute(orderSql, [user_id , new Date(), total, user_Address, user_Telephone, payment_type]);
+      let orderId = resultOrder.insertId;
+
+      for(var i=0; i < ordersDetails.length; i++){
+        let orderDetailsSql = "insert into order_details (order_id,product_id, quantity,price) values(? , ? , ? , ?)"
+         await db.execute(orderDetailsSql, [orderId , ordersDetails[i].product_id, ordersDetails[i].quantity, ordersDetails[i].price]);
+        
+         let updateProduct ="update products set stock = stock - ? where id= ?";
+         await db.execute(updateProduct, [ordersDetails[i].quantity, ordersDetails[i].product_id])
+
+      }
+
+  }catch (error) {
+    throw error; 
+  }
+}
+}
 
 
 module.exports = Order;
