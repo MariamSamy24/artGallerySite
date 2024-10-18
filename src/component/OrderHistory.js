@@ -1,110 +1,136 @@
-import React, { useState } from 'react';  
+import React, { useState, useEffect } from 'react'; 
+import axios from 'axios';  
 import './styles.css';  
 import './OrderHistory.css';  
 
 const OrderHistory = () => {  
-    const [orders] = useState([  
-        { date: '5/9/2022', total: '€4.094,99', status: 'Pending' },  
-        { date: '5/9/2022', total: '€1.660,00', status: 'shipped' },  
-        { date: '12/7/2021', total: '€147,59', status: 'shipped' },  
-        { date: '6/14/2021', total: '€35,90', status: 'Pending' },  
-        { date: '6/14/2021', total: '€35,90', status: 'shipped' },  
-        { date: '5/18/2021', total: '€566,81', status: 'Pending' },  
-        { date: '5/20/2021', total: '€159,48', status: 'delivered' },  
-        { date: '5/18/2021', total: '€130,56', status: 'delivered' },  
-        { date: '5/18/2021', total: '€378,26', status: 'delivered' },  
-    ]);  
-
-    const [searchTerm, setSearchTerm] = useState('');  
+    const [orders, setOrders] = useState([]);  
+    const [filteredOrders, setFilteredOrders] = useState([]);  
+    const [status, setStatus] = useState('');  
     const [fromDate, setFromDate] = useState('');  
     const [toDate, setToDate] = useState('');  
-    const [showOrderHistory, setShowOrderHistory] = useState(false);  
-    const [filteredOrders, setFilteredOrders] = useState(orders);  
-    const [selectedOrder, setSelectedOrder] = useState(null); // حالة لتحديد الطلب المحدد  
+    const [selectedOrder, setSelectedOrder] = useState(null);  
+    const [noOrdersMessage, setNoOrdersMessage] = useState('');  
 
-    const handleSearch = () => {  
-        const filtered = orders.filter(order => {  
-            const orderDate = new Date(order.date);  
-            const startDate = new Date(fromDate);  
-            const endDate = new Date(toDate);  
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-            const dateMatch = (!fromDate || orderDate >= startDate) && (!toDate || orderDate <= endDate);  
-            const statusMatch = !searchTerm || order.status.toLowerCase().includes(searchTerm.toLowerCase());  
+    const fetchOrders = async (filters = {}) => {
+        try {
+            const token = localStorage.getItem('token'); 
+            const { fromDate, toDate, status } = filters;
 
-            return dateMatch && statusMatch;  
-        });  
+            const params = {
+                fromDate: fromDate || '',
+                toDate: toDate || '',
+                status: status || '',
+            };
 
-        setFilteredOrders(filtered);  
-    };  
+            const response = await axios.get(`${apiUrl}/api/orders/user`, {
+                headers: {
+                    Authorization: `${token}`, 
+                },
+                params: params,  
+            });
+            
+            if (!response.data.orders || response.data.orders.length === 0) {
+                setNoOrdersMessage('No orders found for this user');  
+                setFilteredOrders([]);
+            } else {
+                setNoOrdersMessage('');  
+                setOrders(response.data.orders);  
+                setFilteredOrders(response.data.orders); 
+            }
+        } catch (error) {
+            console.error("Error fetching orders:", error);
+            setNoOrdersMessage('Error fetching orders'); 
+        }
+    };
 
-    const toggleOrderHistory = () => {  
-        setShowOrderHistory(!showOrderHistory);  
-    };  
+    useEffect(() => {
+        fetchOrders();  
+    }, [apiUrl]);
+
+    const handleSearch = () => {
+        fetchOrders({
+            fromDate: fromDate,
+            toDate: toDate,
+            status: status,
+        });
+    };
 
     const handleViewDetails = (order) => {  
-        setSelectedOrder(order); // تعيين الطلب المختار  
+        setSelectedOrder(order);  
     };  
 
     const closeDetails = () => {  
-        setSelectedOrder(null); // إعادة تعيين الطلب المختار  
+        setSelectedOrder(null);  
     };  
+
+    const formatDate = (dateString) => {
+        const options = { day: 'numeric', month: 'short', year: 'numeric' }; 
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options); 
+    };
 
     return (  
         <div className="order-history">  
-            <div className="user-icon" onClick={toggleOrderHistory} style={{ cursor: 'pointer' }}>  
-                👤  
+            <div className="search-bar">  
+                <input  
+                    type="date"  
+                    value={fromDate}  
+                    onChange={(e) => setFromDate(e.target.value)}  
+                />  
+                <input  
+                    type="date"  
+                    value={toDate}  
+                    onChange={(e) => setToDate(e.target.value)}  
+                />  
+                <select 
+                    value={status}  
+                    onChange={(e) => setStatus(e.target.value)} 
+                    placeholder="Search by status"
+                >
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                </select>  
+                <button onClick={handleSearch}>Search</button>  
             </div>  
-            <br /><br />  
-            {showOrderHistory && (  
-                <>  
-                    <div className="search-bar">  
-                        <input  
-                            type="date"  
-                            value={fromDate}  
-                            onChange={(e) => setFromDate(e.target.value)}  
-                        />  
-                        <input  
-                            type="date"  
-                            value={toDate}  
-                            onChange={(e) => setToDate(e.target.value)}  
-                        />  
-                        <input  
-                            type="text"  
-                            placeholder="Search by status"  
-                            value={searchTerm}  
-                            onChange={(e) => setSearchTerm(e.target.value)}  
-                        />  
-                        <button onClick={handleSearch}>Search</button>  
-                    </div>  
-                    <table>  
-                        <thead>  
-                            <tr>  
-                                <th>Order date</th>  
-                                <th>Total</th>  
-                                <th>Order status</th>  
+
+            {noOrdersMessage ? (
+                <div className="no-orders-message">{noOrdersMessage}</div>
+            ) : (
+                <table>  
+                    <thead>  
+                        <tr>  
+                            <th>Order date</th>  
+                            <th>Total</th>  
+                            <th>Order status</th>  
+                        </tr>  
+                    </thead>  
+                    <tbody>  
+                        {filteredOrders.map((order, index) => (  
+                            <tr key={index}>  
+                                <td>{formatDate(order.order_date)}</td>  
+                                <td>{order.total_amount}</td>  
+                                <td>  
+                                    {order.status}   
+                                    <button onClick={() => handleViewDetails(order)}>View details</button>  
+                                </td>  
                             </tr>  
-                        </thead>  
-                        <tbody>  
-                            {filteredOrders.map((order, index) => (  
-                                <tr key={index}>  
-                                    <td>{order.date}</td>  
-                                    <td>{order.total}</td>  
-                                    <td>  
-                                        {order.status}   
-                                        <button onClick={() => handleViewDetails(order)}>View details</button>  
-                                    </td>  
-                                </tr>  
-                            ))}  
-                        </tbody>  
-                    </table>  
-                    <button className="show-more">Show next 10 orders</button>  
-                </>  
-            )}  
+                        ))}  
+                    </tbody>  
+                </table>
+            )}
+
+            <button className="show-more">Show next 10 orders</button>  
+
             {selectedOrder && (  
                 <div className="order-details">  
                     <h2>Order Details</h2>  
-                    <p>Date: {selectedOrder.date}</p>  
-                    <p>Total: {selectedOrder.total}</p>  
+                    <p>Date: {formatDate(selectedOrder.order_date)}</p>  
+                    <p>Total: {selectedOrder.total_amount}</p>  
                     <p>Status: {selectedOrder.status}</p>  
                     <button onClick={closeDetails}>Close</button>  
                 </div>  

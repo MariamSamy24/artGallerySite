@@ -7,9 +7,27 @@ class Order {
     const [rows] = await db.execute("SELECT * FROM orders ORDER  BY order_date DESC");
     return rows;
   }
-  static async getAllByUserId(user_id) {
-    const [rows] = await db.execute("SELECT * FROM orders  where user_id = ? ORDER  BY order_date DESC",[user_id]);
-    return rows;
+  static async getAllByUserId(user_id, fromDate, toDate, status) {
+    let query = "SELECT * FROM orders  where user_id = ?";
+    const params = [user_id];
+
+    if (fromDate) {
+      query += ` AND order_date >= ?`;
+      params.push(fromDate);
+    }
+    if (toDate) {
+      query += ` AND order_date <= ?`;
+      params.push(toDate);
+    }
+
+  if (status) {
+    query += ` AND status LIKE ?`;
+    params.push(`%${status}%`);
+  }
+  query += ` ORDER BY order_date DESC`;
+
+  const [rows] = await db.execute(query, params);
+  return rows;
   }
 
 
