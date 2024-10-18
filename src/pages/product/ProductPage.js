@@ -52,7 +52,7 @@ function ProductPage() {
   useEffect(() => {
     fetchCategories();
     fetchProducts();
-  }, [searchQuery, minPrice, maxPrice, currentPage, selectedCategory]);
+  }, [searchQuery, currentPage, selectedCategory]);
 
 
 
@@ -106,10 +106,10 @@ function ProductPage() {
   };
 
   return (
-    <div>
+  <div>
     <div className="product-page">
       <div className="filter-section">
-        <input className='search'
+        <input className="search-input"
           type="text"
           placeholder="Search..."
           value={searchQuery}
@@ -159,6 +159,8 @@ function ProductPage() {
               max="5000"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
+              onMouseUp={fetchProducts}
+              onTouchEnd={fetchProducts}
             />
             <input
               type="range"
@@ -167,6 +169,8 @@ function ProductPage() {
               max="5000"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
+              onMouseUp={fetchProducts}
+              onTouchEnd={fetchProducts}
             />
           </div>
 
@@ -181,8 +185,8 @@ function ProductPage() {
         {renderLoading()}
         {renderProducts()}
       </div>
-    </div>
-    {renderPagination()}
+      </div>
+      {renderPagination()}
 
     </div>
   );
