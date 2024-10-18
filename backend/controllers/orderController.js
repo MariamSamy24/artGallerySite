@@ -28,9 +28,9 @@ exports.searchOrders = async (req, res) => {
 exports.getByUserId = async (req, res) => {
   let user_id =  req.user.id;
   const { fromDate, toDate, status } = req.query;
-  
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
   try {
-    const orders = await Order.getAllByUserId(user_id, fromDate, toDate, status );
+    const orders = await Order.getAllByUserId(user_id, fromDate, toDate, status, baseUrl );
     if (!orders || orders.length === 0) {
       return res.status(200).json({ message: 'No orders found for this user' });
     }
