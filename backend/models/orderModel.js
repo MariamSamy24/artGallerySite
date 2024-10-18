@@ -7,10 +7,62 @@ class Order {
     const [rows] = await db.execute("SELECT * FROM orders ORDER  BY order_date DESC");
     return rows;
   }
-  static async getAllByUserId(user_id) {
-    const [rows] = await db.execute("SELECT * FROM orders  where user_id = ? ORDER  BY order_date DESC",[user_id]);
-    return rows;
-  }
+  static async getAllByUserId(user_id, fromDate, toDate, status, baseUrl) {
+    let query = `
+      SELECT orders.*, order_details.id order_detail_id, order_details.quantity, order_details.price, title, image
+      FROM orders 
+      LEFT JOIN order_details ON orders.id = order_details.order_id
+      LEFT join products on order_details.product_id =products.id
+      WHERE orders.user_id = ?`;
+
+    const params = [user_id];
+
+    if (fromDate) {
+        query += ` AND order_date >= ?`;
+        params.push(fromDate);
+    }
+    if (toDate) {
+        query += ` AND order_date <= ?`;
+        params.push(toDate);
+    }
+    if (status) {
+        query += ` AND orders.status LIKE ?`;
+        params.push(`%${status}%`);
+    }
+
+    query += ` ORDER BY orders.order_date DESC`;
+
+    const [rows] = await db.execute(query, params);
+
+    const orders = [];
+
+    rows.forEach(row => {
+        let existingOrder = orders.find(order => order.id === row.id);
+
+        if (!existingOrder) {
+            existingOrder = {
+                id: row.id,
+                user_id: row.user_id,
+                order_date: row.order_date,
+                total_amount: row.total_amount,
+                status: row.status,
+                order_details: []
+            };
+            orders.push(existingOrder);
+        }
+        
+        if (row.order_detail_id) {
+            existingOrder.order_details.push({
+                imageUrl: `${baseUrl}/${row.image}`,
+                title: row.title,
+                quantity: row.quantity,
+                price: row.price
+            });
+        }
+    });
+
+    return orders;
+}
 
 
 

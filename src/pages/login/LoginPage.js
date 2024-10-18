@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, {useContext, useState } from 'react';
+import { UserContext } from '../../context/UserContext';
 import axios from 'axios';
 import './LoginPage.css';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const apiUrl = process.env.REACT_APP_API_URL; 
 
@@ -21,7 +25,10 @@ function LoginPage() {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify({ name: response.data.name }));
+        setUser({ name: response.data.name });
         toast.success("Login successful!");
+        navigate('/');
       } else {
         setError(response.data.message);
       }

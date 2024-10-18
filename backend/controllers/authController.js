@@ -45,14 +45,14 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role},
        process.env.JWT_SECRET, 
-       {  algorithm: 'HS256', expiresIn: '1h' });
+       {  algorithm: 'HS256', expiresIn: '1d' });
 
        const refreshToken = jwt.sign(
         { id: user.id, email: user.email, role: user.role }, 
         process.env.JWT_SECRET, 
         { algorithm: 'HS256', expiresIn: '15d' } 
     );
-    res.json({ token , refreshToken });
+    res.json({ token , refreshToken ,userId : user.id, name: user.name });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

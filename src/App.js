@@ -12,10 +12,11 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { CartProvider } from './context/CartContext';
+import { UserProvider } from './context/UserContext';
 
 function App() { 
   return (
-   
+<UserProvider>   
 <CartProvider>
 <Navbar />
 <Routes>
@@ -32,7 +33,7 @@ function App() {
      
       <ToastContainer />
 </CartProvider> 
-    
+</UserProvider>   
   );
 }
 
