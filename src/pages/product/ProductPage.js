@@ -141,20 +141,22 @@ function ProductPage() {
           ))}
         </div>
 
+
         <div className="price-filter">
           <h4>Price Range</h4>
-          <div className="price-slider-container">
-            <div
-              className="range-bar"
+          <div className="price-range-values">
+            <span>Min: ${minPrice}</span>
+            <span>Max: ${maxPrice}</span>
+          </div>
+          <div className="range-slider">
+            <div className="rangeValues"
               style={{
                 left: `${(minPrice / 5000) * 100}%`,
                 width: `${((maxPrice - minPrice) / 5000) * 100}%`,
               }}
             ></div>
 
-            <input
-              type="range"
-              className="price-slider"
+            <input type="range"
               min="0"
               max="5000"
               value={minPrice}
@@ -162,9 +164,7 @@ function ProductPage() {
               onMouseUp={fetchProducts}
               onTouchEnd={fetchProducts}
             />
-            <input
-              type="range"
-              className="price-slider"
+            <input type="range"
               min="0"
               max="5000"
               value={maxPrice}
@@ -172,11 +172,6 @@ function ProductPage() {
               onMouseUp={fetchProducts}
               onTouchEnd={fetchProducts}
             />
-          </div>
-
-          <div className="price-range-values">
-            <span>Min: ${minPrice}</span>
-            <span>Max: ${maxPrice}</span>
           </div>
         </div>
       </div>
