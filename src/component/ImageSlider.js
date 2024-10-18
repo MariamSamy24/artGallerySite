@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './ImageSlider.css';
 
-
 function ImageSlider({ images }) {
-  console.log(images)
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
+      handleNextSlide();
     }, 5000); // Adjust the interval as needed
 
     return () => clearInterval(intervalId);
-  }, [images]);
+  }, [currentSlide]);
 
   const handlePrevSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + images.length) % images.length);
@@ -24,16 +22,13 @@ function ImageSlider({ images }) {
 
   return (
     <div className="image-slider">
-      <button onClick={handlePrevSlide}>Prev</button>
-      <button onClick={handleNextSlide}>Next</button>
-      <div className="slider-container">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className={`slide ${index === currentSlide ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${image.imgPath})` }}
-          ></div>
-        ))}
+      <button className="slider-button prev-button" onClick={handlePrevSlide}>Prev</button>
+      <button className="slider-button next-button" onClick={handleNextSlide}>Next</button>
+
+      <div
+        className="slide"
+        style={{ backgroundImage: `url(${images[currentSlide].imgPath})` }}
+      >
       </div>
     </div>
   );
