@@ -63,9 +63,9 @@ exports.getByUserId = async (req, res) => {
 
   exports.createOrder = async (req, res) => {
     try {
-      const { ordersDetails, user_Address, user_Telephone, payment_type} = req.body; 
+      const { ordersDetails,user_name, user_Address, user_Telephone, payment_type} = req.body; 
       const user_id =  req.user.id
-      const orders = await Order.createOrder(ordersDetails, user_id, user_Address, user_Telephone, payment_type);
+      const orders = await Order.createOrder(ordersDetails, user_name,user_id, user_Address, user_Telephone, payment_type);
   
       res.status(201).json("Order Created successfully");
     } catch (err) {

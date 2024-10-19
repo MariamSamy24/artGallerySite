@@ -94,7 +94,7 @@ class Order {
   }
 
 
-  static async createOrder(ordersDetails, user_id, user_Address, user_Telephone, payment_type){
+  static async createOrder(ordersDetails, user_name, user_id, user_Address, user_Telephone, payment_type){
     let total  = 0;
     for(var i=0; i < ordersDetails.length; i++){
         total += (ordersDetails[i].price * ordersDetails[i].quantity);
@@ -102,8 +102,8 @@ class Order {
 
     try{
 
-      let orderSql = "insert into orders(user_id,order_date,total_amount , status, user_Address, user_Telephone, payment_type) values(? , ? , ? , 'pending', ? , ? , ?)"
-      let [resultOrder] = await db.execute(orderSql, [user_id , new Date(), total, user_Address, user_Telephone, payment_type]);
+      let orderSql = "insert into orders(user_id, user_name,order_date,total_amount , status, user_Address, user_Telephone, payment_type) values(? , ? , ? , ? , 'pending', ? , ? , ?)"
+      let [resultOrder] = await db.execute(orderSql, [user_id ,user_name, new Date(), total, user_Address, user_Telephone, payment_type]);
       let orderId = resultOrder.insertId;
 
       for(var i=0; i < ordersDetails.length; i++){
