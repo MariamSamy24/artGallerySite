@@ -167,7 +167,7 @@ const ProductList = ({ token }) => {
               onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
               required
             >
-              <option disabled>Select Category</option>
+              <option disabled value="">Select Category</option>
               {validCategories.map((category, index) => (
                 <option key={index} value={category}>
                   {category}
