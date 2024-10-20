@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Sidebar from './Sidebar';
 import ProductList from './ProductList';
+import AdminOrderList from '../pages/AdminOrder/AdminOrderList';
+import AdminContext from './AdminContext';
 
 const AdminPanel = () => {
   const token = localStorage.getItem('token');
+  const { activeTab } = useContext(AdminContext);
 
   return (
     <div className="flex min-h-screen">
@@ -11,7 +14,8 @@ const AdminPanel = () => {
         {token && (
           <div className='flex'>
             <Sidebar />
-            <ProductList token={token} />
+            {activeTab === 'products' && <ProductList token={token} />}
+            {activeTab === 'orders' && <AdminOrderList token={token} />}
           </div>
         )}
       </div>

@@ -14,11 +14,19 @@ exports.getAllOrders = async (req, res) => {
 
 exports.searchOrders = async (req, res) => {
   try {
-    const {  order_id, customer_name} = req.query; 
-   
-    const orders = await Order.searchOrders(order_id, customer_name);
+    const {  q } = req.query; 
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 100; 
+    const offset = (page - 1) * limit;
 
-    res.json({orders});
+    const {orders,total} = await Order.searchOrders(q || '',limit, offset);
+
+    res.status(200).json({
+      orders,
+      page, 
+      totalPages: Math.ceil(total / limit), 
+      totalProducts: total 
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -48,12 +56,12 @@ exports.getByUserId = async (req, res) => {
     
   
     try {
-      const order = await Order.getByOrderId(id);
+      const {order, orders_details} = await Order.getByOrderId(id);
   
       if (!order) {
         return res.status(404).json({ message: 'Order not found' });
       }
-      res.json(order);
+      res.json({ order,orders_details});
       
     } catch (err) {
       res.status(500).json({ error: err.message });
