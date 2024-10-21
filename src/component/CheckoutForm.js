@@ -1,12 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
-import { loadStripe } from '@stripe/stripe-js';
 import './CheckoutForm.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const stripePromise = loadStripe('pk_test_9pePFBMMQhTe6BOWtatVfCNz');
 
 function CheckoutForm() {
   const { cart, clearCart } = useContext(CartContext);
@@ -52,7 +50,6 @@ function CheckoutForm() {
   const handleCashPayment = async () => {
     if (paymentMethod === 'Cash') {
       const orderDetails = await handleOrderCreation(); 
-        debugger
       navigate('/order-confirmation', {
         state: { orderId: orderDetails.orderId, total: orderDetails.total, paymentType: 'Cash' },
       });
@@ -60,28 +57,21 @@ function CheckoutForm() {
   };
 
   const handleStripePayment = async () => {
-    debugger
     if (paymentMethod === 'Stripe') {
-      const cartItems = cart.map(item => ({
-        product_id: item.id, 
-        quantity: item.quantity,
-        price: item.price,
-    }));
-  
       const response = await fetch( apiUrl+ '/api/payments/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ items: cartItems }),
+        body: JSON.stringify({ items: cart }),
       });
   
-      const session = await response.json(); // Get the session ID from response
-  
+      const session = await response.json();
+      debugger
       // Redirect to Stripe Checkout
-      const stripe = window.Stripe('pk_test_9pePFBMMQhTe6BOWtatVfCNz');
+      const stripe = window.Stripe(process.env.REACT_APP_STRIPE_PUBLISHER);
       const { error } = await stripe.redirectToCheckout({
-        sessionId: session.id, // Use session ID here
+        sessionId: session.id, 
       });
   
       if (error) {
@@ -91,7 +81,6 @@ function CheckoutForm() {
   };
 
   const handleSubmit = (e) => {
-    debugger
     e.preventDefault();
     if (paymentMethod === 'Cash') {
       handleCashPayment();
