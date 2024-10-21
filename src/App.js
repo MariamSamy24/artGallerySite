@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage.js';
 import LoginPage from './pages/login/LoginPage.js';
 import RegisterPage from "./pages/register/RegisterPage.js";
 import CartPage from "./pages/Cart/CartPage.js";
+import OrderConfirmationPage from "./pages/OrderConfirmation/OrderConfirmationPage.js"
 import OrderHistory from "./component/OrderHistory.js";
 import AdminPanel from "./component/AdminPanel.js";
 import { AdminProvider } from "./component/AdminContext.js";
@@ -28,6 +29,7 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage/>} />
             <Route path="cart" element={<CartPage/>} />
+            <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
             <Route path="order" element={<OrderHistory/>} />
             <Route path="admin-panel" element={<AdminPanel />} />
           </Routes>

@@ -80,7 +80,7 @@ exports.getByUserId = async (req, res) => {
 
       await sendMail.sendOrderConfirmationEmail(user_email, orders.id, orders.totalAmount, user_name);
 
-      res.status(201).json("Order Created successfully");
+      res.status(201).json({orderId: orders.id, total: orders.totalAmount});
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
