@@ -116,6 +116,8 @@ class Order {
 
       }
 
+      return { id: orderId, totalAmount: total };
+
   }catch (error) {
     throw error; 
   }

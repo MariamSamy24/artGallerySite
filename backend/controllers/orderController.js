@@ -1,4 +1,5 @@
 const Order = require('../models/orderModel');
+const sendMail = require('../utils/sendMail');
 
 
 exports.getAllOrders = async (req, res) => {
@@ -72,9 +73,13 @@ exports.getByUserId = async (req, res) => {
   exports.createOrder = async (req, res) => {
     try {
       const { ordersDetails,user_name, user_Address, user_Telephone, payment_type} = req.body; 
-      const user_id =  req.user.id
+      const user_id =  req.user.id;
+      const user_email=  req.user.email;
       const orders = await Order.createOrder(ordersDetails, user_name,user_id, user_Address, user_Telephone, payment_type);
   
+
+      await sendMail.sendOrderConfirmationEmail(user_email, orders.id, orders.totalAmount, user_name);
+
       res.status(201).json("Order Created successfully");
     } catch (err) {
       res.status(500).json({ error: err.message });
