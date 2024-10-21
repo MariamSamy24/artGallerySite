@@ -79,7 +79,7 @@ class Order {
 
 
   static async searchOrders(q, limit, offset) {
-    let query = `SELECT SQL_CALC_FOUND_ROWS orders.*, users.name AS customer_name, users.email 
+    let query = `SELECT SQL_CALC_FOUND_ROWS orders.*, users.name, users.email 
       FROM orders
       INNER JOIN users ON users.id = orders.user_id `;
   

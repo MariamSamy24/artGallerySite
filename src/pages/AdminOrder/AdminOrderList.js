@@ -27,7 +27,7 @@ import AdminOrderDetails from './AdminOrderDetails'
 
   useEffect(() => {
     fetchOrders();
-  }, [page, limit, token]);
+  }, [page, limit, token, orders]);
 
   const handleSearch = () => {
     setPage(1); 
@@ -53,7 +53,14 @@ import AdminOrderDetails from './AdminOrderDetails'
 };
 
   const handleViewDetails = (orderId) => {
-    setSelectedOrderId(orderId); // Open the modal with selected order ID
+    setSelectedOrderId(orderId); 
+  };
+
+  const handleUpdateOrderStatus = (updatedOrder) => {
+    debugger
+    setOrders(orders.map(order => 
+      order.id === updatedOrder.order.id ? updatedOrder.order : order
+    ));
   };
 
   return (
@@ -89,7 +96,7 @@ import AdminOrderDetails from './AdminOrderDetails'
             <tr key={order.id}>
               <td className="px-4 py-2 border">{order.id}</td>
               <td className="px-4 py-2 border">{formatDate(order.order_date)}</td>
-              <td className="px-4 py-2 border">{order.customer_name}</td>
+              <td className="px-4 py-2 border">{order.name}</td>
               <td className="px-4 py-2 border">{order.total_amount}</td>
               <td className="px-4 py-2 border">{order.status}</td>
               <td className="px-4 py-2 border">
@@ -128,6 +135,7 @@ import AdminOrderDetails from './AdminOrderDetails'
         orderId={selectedOrderId}
         onClose={() => setSelectedOrderId(null)}
         token={token}
+        onUpdateOrderStatus={handleUpdateOrderStatus}
       />
     )}
     </div>

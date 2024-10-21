@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const AdminOrderDetails = ({ orderId, onClose,token }) => {
+const AdminOrderDetails = ({ orderId, onClose, token, onUpdateOrderStatus }) => {
   const [orderDetails, setOrderDetails] = useState(null);
   const [status, setStatus] = useState('');
   
@@ -17,7 +17,7 @@ const AdminOrderDetails = ({ orderId, onClose,token }) => {
             },
         });
         setOrderDetails(response.data);
-        setStatus(response.data.status);  
+        setStatus(response.data.order.status);  
       } catch (error) {
         console.error('Error fetching order details', error);
       }
@@ -28,10 +28,11 @@ const AdminOrderDetails = ({ orderId, onClose,token }) => {
 
   const handleUpdateStatus = async () => {
     try {
-      await axios.put(`${apiUrl}/api/orders/${orderId}`, {  status },
+      await axios.put(`${apiUrl}/api/orders/${orderId}`, { status },
         { headers: { Authorization: `${token}` } } );  
       const updatedOrder = { ...orderDetails, status };
       setOrderDetails(updatedOrder);
+      onUpdateOrderStatus(updatedOrder);
       toast.success("Order update Status Successfully!");
     } catch (error) {
       console.error('Error updating order status', error);
@@ -48,7 +49,7 @@ const AdminOrderDetails = ({ orderId, onClose,token }) => {
         <p><strong>Customer Name:</strong> {orderDetails.order.user_name}</p>
         <p><strong>Customer Telephone:</strong> {orderDetails.order.user_Telephone}</p>
         <p><strong>Customer Address:</strong> {orderDetails.order.user_Address}</p>
-        <p><strong>Total Amount:</strong> {orderDetails.order.total_Amount}</p>
+        <p><strong>Total Amount:</strong> {orderDetails.order.total_amount}</p>
 
         <div className="mt-4">
           <h3 className="text-lg font-semibold">Purchased Products</h3>
@@ -64,14 +65,12 @@ const AdminOrderDetails = ({ orderId, onClose,token }) => {
         <div className="mt-4">
           <h3 className="text-lg font-semibold">Order Status</h3>
           <div className="flex items-center mt-2 space-x-2">
-            <select
-              className="p-2 border rounded-lg"
+            <select className="p-2 border rounded-lg"
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="Pending">Pending</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Delivered">Delivered</option>
+              onChange={(e) => setStatus(e.target.value)} >
+              <option value="pending">Pending</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
             </select>
             <button
               className="px-4 py-2 text-white bg-green-500 rounded-lg"
