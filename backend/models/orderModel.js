@@ -78,21 +78,22 @@ class Order {
   }
 
 
- 
-
-  static async searchOrders(id, customer_name) {
-    let sql = "SELECT orders.*, users.name , users.email  FROM orders inner join users on users.id = orders.user_id where users.name like ? ";
-    const params = [`%${customer_name}%`];
-
-    if (id) {
-      sql += " or orders.id = ?";
-      params.push(id);
+  static async searchOrders(q, limit, offset) {
+    let query = `SELECT SQL_CALC_FOUND_ROWS orders.*, users.name, users.email 
+      FROM orders
+      INNER JOIN users ON users.id = orders.user_id `;
+  
+    if (q && !isNaN(q)) {
+      query += `WHERE orders.id = ${q}`;
+     
+    } else if(q) {
+      query += `WHERE users.name LIKE '%${q}%'`;
     }
-
-    const [rows] = await db.execute(sql, params);
-    return rows;
+    query += ` LIMIT ${Number(limit)} OFFSET ${Number(offset)}`;
+    const [orders] = await db.execute(query);
+    const [[{ total }]] = await db.execute("SELECT FOUND_ROWS() as total");
+    return { orders, total };
   }
-
 
   static async createOrder(ordersDetails, user_name, user_id, user_Address, user_Telephone, payment_type){
     let total  = 0;
