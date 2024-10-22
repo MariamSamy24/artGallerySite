@@ -66,7 +66,7 @@ function ProductPage() {
         <h3>{product.title}</h3>
         <p>{product.short_description}</p>
         <p>Price: ${product.price}</p>
-        <AddToCartButton product={product} />
+        <AddToCartButton product={product} className="add-to-cart-btn"/>
       </div>
     ));
   };

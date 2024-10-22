@@ -136,7 +136,6 @@ const OrderHistory = () => {
                             <p><strong>Total:</strong> {selectedOrder.total_amount}</p>
                             <p><strong>Status:</strong> {selectedOrder.status}</p>
                             
-                            <h3>Items in this order:</h3>
                             <div className="order-items-container">
                                 {selectedOrder.order_details.length > 0 ? (
                                     <table className="order-details-table">

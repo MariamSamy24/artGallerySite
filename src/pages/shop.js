@@ -1,6 +1,7 @@
 import React from 'react';
+import ProductPage from './product/ProductPage.js';
 
 export default function Shop(){
 
-    return <h1>Hello shopping</h1>
+    return   <ProductPage/>
 }

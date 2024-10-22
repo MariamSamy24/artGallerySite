@@ -7,7 +7,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
 const ordersRoutes = require('./routes/ordersRoutes');
  const customerRoutes =require('./routes/customerRoutes');
-
+ const stripeRoutesr =require('./routes/stripeRoutes');
 //const bcrypt = require('bcrypt');
 //const crypto = require('crypto');
 
@@ -36,6 +36,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', ordersRoutes);
  app.use('/api/customers', customerRoutes);
+ app.use('/api', stripeRoutesr);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));    
