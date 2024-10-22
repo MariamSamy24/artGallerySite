@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom'; 
 import './ProductPage.css';
 import AddToCartButton from '../../component/AddToCartButton';
 
@@ -13,6 +14,8 @@ function ProductPage() {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+
+  const location = useLocation(); 
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -51,11 +54,17 @@ function ProductPage() {
 
   useEffect(() => {
     fetchCategories();
+    debugger
+    const searchQueryFromState = location.state?.searchQuery || '';
+    if (searchQueryFromState) {
+      setSearchQuery(searchQueryFromState);
+    }
+
     fetchProducts();
   }, [searchQuery, currentPage, selectedCategory]);
 
 
-
+  
   const renderProducts = () => {
     if (products.length === 0) {
       return <p>No products found</p>;
