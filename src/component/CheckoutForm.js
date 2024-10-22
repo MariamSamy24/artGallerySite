@@ -12,8 +12,9 @@ function CheckoutForm() {
   const [address, setAddress] = useState('');
   const [telephone, setTelephone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
-  
   const apiUrl = process.env.REACT_APP_API_URL;
   const token = localStorage.getItem('token');
 
@@ -21,8 +22,20 @@ function CheckoutForm() {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
-  const handleOrderCreation = async (paymentIntentId = null) => {
-    debugger
+  const handleOrderCreation = async () => {
+    const orderData = GetOrderData();
+   
+    const response = await axios.post(apiUrl +'/api/orders', orderData,
+      { headers: { Authorization: `${token}` } }
+    );
+    clearCart(); 
+    setLoading(false);
+    toast.success(`Order placed successfully`);
+    return response.data;
+  };
+
+
+  const GetOrderData =()=>{
     const ordersDetails = cart.map(item => ({
       product_id: item.id, 
       quantity: item.quantity,
@@ -35,17 +48,10 @@ function CheckoutForm() {
       user_Address: address,
       user_Telephone: telephone,
       payment_type: paymentMethod,
-      paymentIntentId: paymentIntentId, 
     };
 
-   
-    const response = await axios.post(apiUrl +'/api/orders', orderData,
-      { headers: { Authorization: `${token}` } }
-    );
-    clearCart(); 
-    toast.success(`Order placed successfully`);
-    return response.data;
-  };
+    return orderData;
+  }
 
   const handleCashPayment = async () => {
     if (paymentMethod === 'Cash') {
@@ -58,6 +64,8 @@ function CheckoutForm() {
 
   const handleStripePayment = async () => {
     if (paymentMethod === 'Stripe') {
+      const orderData = GetOrderData();
+      localStorage.setItem('orderData', JSON.stringify(orderData));
       const response = await fetch( apiUrl+ '/api/payments/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -67,13 +75,12 @@ function CheckoutForm() {
       });
   
       const session = await response.json();
-      debugger
-      // Redirect to Stripe Checkout
       const stripe = window.Stripe(process.env.REACT_APP_STRIPE_PUBLISHER);
       const { error } = await stripe.redirectToCheckout({
         sessionId: session.id, 
       });
-  
+      
+      setLoading(false);
       if (error) {
         console.error("Error redirecting to checkout:", error);
       }
@@ -82,6 +89,7 @@ function CheckoutForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     if (paymentMethod === 'Cash') {
       handleCashPayment();
     } else if (paymentMethod === 'Stripe') {
@@ -128,7 +136,9 @@ function CheckoutForm() {
           <option value="Stripe">Credit Card (Stripe)</option>
         </select>
 
-        <button type="submit">Place Order</button>
+        <button type="submit" disabled={loading}>
+            {loading ? 'Processing...' : 'Place Order'}
+      </button>
       </form>
       :""}
     </div>

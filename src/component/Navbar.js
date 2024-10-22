@@ -15,7 +15,15 @@ const Navbar = () => {
 
     const handleOrderHistoryClick = () => {
         if (user) {
-            navigate('/order'); 
+            navigate('/orders'); 
+        } else {
+            navigate('/login'); 
+        }
+    };
+
+    const handleCheckoutClick = () => {
+        if (user) {
+            navigate('/checkout'); 
         } else {
             navigate('/login'); 
         }
@@ -40,7 +48,7 @@ const Navbar = () => {
                         <Link to="/shop">Shop</Link>
                     </li>
                     <li>
-                        <Link to="/checkout">Checkout</Link>
+                        <a onClick={handleCheckoutClick} style={{ cursor: 'pointer' }}>Checkout</a>
                     </li>
                     {user ? (
                         <>

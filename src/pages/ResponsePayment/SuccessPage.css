@@ -1,0 +1,21 @@
+.success-page {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .success-page h1 {
+    color: green;
+  }
+  
+  .view-orders-btn {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .view-orders-btn:hover {
+    background-color: darkgreen;
+  }
+  

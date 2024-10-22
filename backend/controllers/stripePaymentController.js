@@ -12,7 +12,7 @@ exports.stripePayment = async (req, res) => {
       });
 
       const price = await createPrice(product.id, {
-          amount: item.price * 100, 
+          amount:  Math.round(item.price * 100), 
           currency: 'usd', 
       });
 
