@@ -29,6 +29,9 @@
   padding: 10px;
   border-radius: 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
 }
 
 .product-image {
@@ -40,6 +43,9 @@
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;;
+}
+.add-to-cart-btn {
+  margin-top: auto; /* Pushes the button to the bottom */
 }
 
 .pagination button {

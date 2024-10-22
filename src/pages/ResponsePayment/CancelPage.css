@@ -1,0 +1,21 @@
+.cancel-page {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .cancel-page h1 {
+    color: red;
+  }
+  
+  .retry-btn {
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .retry-btn:hover {
+    background-color: darkred;
+  }
+  
