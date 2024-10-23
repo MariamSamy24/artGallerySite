@@ -77,10 +77,10 @@ exports.getByUserId = async (req, res) => {
     try {
       const { ordersDetails,user_name, user_Address, user_Telephone, payment_type} = req.body; 
       const user_id =  req.user.id;
-      const user_email=  req.user.email;
+     
       const orders = await Order.createOrder(ordersDetails, user_name,user_id, user_Address, user_Telephone, payment_type);
   
-
+     // const user_email=  req.user.email;
       //await sendMail.sendOrderConfirmationEmail(user_email, orders.id, orders.totalAmount, user_name);
 
       res.status(201).json({orderId: orders.id, total: orders.totalAmount});
