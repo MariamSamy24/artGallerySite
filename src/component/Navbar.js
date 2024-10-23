@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { CartContext } from '../context/CartContext';
@@ -100,7 +100,7 @@ const Navbar = () => {
                                 )}
                             </ul>
                             <div className="navbar-actions">
-                                <input type="text" placeholder="Search..." className="navbar-search" />
+                             
                                 <div className="navbar-cart">
                                     <Link to="/cart">
                                         <FontAwesomeIcon icon={faShoppingCart} size="2x" />

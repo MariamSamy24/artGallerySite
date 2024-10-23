@@ -35,7 +35,10 @@ exports.searchOrders = async (req, res) => {
 
 
 exports.getByUserId = async (req, res) => {
-  let user_id =  req.user.id;
+  let { user_id } = req.query;
+  if(user_id == null || user_id === ""){
+    user_id =  req.user.id;
+  }
   const { fromDate, toDate, status } = req.query;
   const baseUrl = `${req.protocol}://${req.get('host')}`;
   try {
