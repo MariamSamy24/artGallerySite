@@ -7,7 +7,7 @@ const CustomerList = ({ token }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCustomers = async () => {
+    const fetchCustomersWithOrders = async () => {
       setLoading(true);
       try {
         const response = await fetch('http://localhost:5000/api/customers', {
@@ -16,15 +16,36 @@ const CustomerList = ({ token }) => {
           },
         });
         if (!response.ok) throw new Error('Error fetching customers');
-        const data = await response.json();
-        setCustomers(data);
+        const customerData = await response.json();
+
+        // Fetch order history for each customer
+        const customersWithOrders = await Promise.all(
+          customerData.map(async (customer) => {
+            const ordersResponse = await fetch(
+              `http://localhost:5000/api/orders/user?user_id=${customer.id}`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+            if (!ordersResponse.ok) {
+              throw new Error(`Error fetching orders for customer ${customer.id}`);
+            }
+            const orders = await ordersResponse.json();
+            return { ...customer, orders };
+          })
+        );
+
+        setCustomers(customersWithOrders);
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchCustomers();
+    
+    fetchCustomersWithOrders();
   }, [token]);
 
   return (
