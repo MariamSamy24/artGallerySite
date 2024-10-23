@@ -27,16 +27,16 @@ const AddToCartButton = ({ product }) => {
   return (
     <button 
       onClick={handleAddToCart} 
-      disabled={isDisabled ||product.stock === 0} 
+      disabled={isDisabled ||product.stock <= 0} 
       style={{
         borderRadius: '10px',
         color: 'white',
         padding: '10px',
-        backgroundColor: product.stock === 0 ? 'grey' : isDisabled ? "#e74c3c": '#088395',
+        backgroundColor: product.stock <= 0 ? 'grey' : isDisabled ? "#e74c3c": '#088395',
         cursor: isDisabled? 'not-allowed' : 'pointer',
       }}
     >
-      {product.stock === 0 ? 'Sold Out' : isDisabled ? 'Max Reached' : 'Add to Cart'}
+      {product.stock <= 0 ? 'Sold Out' : isDisabled ? 'Max Reached' : 'Add to Cart'}
     </button>
   );
 };

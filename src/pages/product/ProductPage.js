@@ -54,7 +54,7 @@ function ProductPage() {
 
   useEffect(() => {
     fetchCategories();
-    debugger
+    
     const searchQueryFromState = location.state?.searchQuery || '';
     if (searchQueryFromState) {
       setSearchQuery(searchQueryFromState);
@@ -71,11 +71,13 @@ function ProductPage() {
     }
     return products.map((product) => (
       <div key={product.id} className="product-card">
-        <img src={product.imageUrl} alt={product.title} className="product-image" />
-        <h3>{product.title}</h3>
-        <p>{product.short_description}</p>
-        <p>Price: ${product.price}</p>
-        <AddToCartButton product={product} className="add-to-cart-btn"/>
+        <a  href={`/shop/${product.id}`}>
+          <img src={product.imageUrl} alt={product.title} className="product-image" />
+          <h3>{product.title}</h3>
+          <p>{product.short_description}</p>
+          <p>Price: ${product.price}</p>
+        </a>
+          <AddToCartButton product={product} className="add-to-cart-btn"/>
       </div>
     ));
   };
