@@ -81,7 +81,7 @@ exports.getByUserId = async (req, res) => {
       const orders = await Order.createOrder(ordersDetails, user_name,user_id, user_Address, user_Telephone, payment_type);
   
      // const user_email=  req.user.email;
-      //await sendMail.sendOrderConfirmationEmail(user_email, orders.id, orders.totalAmount, user_name);
+      await sendMail.sendOrderConfirmationEmail(user_email, orders.id, orders.totalAmount, user_name);
 
       res.status(201).json({orderId: orders.id, total: orders.totalAmount});
     } catch (err) {

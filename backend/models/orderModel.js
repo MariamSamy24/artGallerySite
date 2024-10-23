@@ -89,6 +89,8 @@ class Order {
     } else if(q) {
       query += `WHERE users.name LIKE '%${q}%'`;
     }
+
+    query += ` ORDER BY orders.order_date DESC`;
     query += ` LIMIT ${Number(limit)} OFFSET ${Number(offset)}`;
     const [orders] = await db.execute(query);
     const [[{ total }]] = await db.execute("SELECT FOUND_ROWS() as total");
