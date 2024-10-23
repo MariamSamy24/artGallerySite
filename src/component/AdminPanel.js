@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Sidebar from './Sidebar';
 import ProductList from './ProductList';
+import CustomerList from './CustomerList';
 import AdminOrderList from '../pages/AdminOrder/AdminOrderList';
 import AdminContext from './AdminContext';
 
@@ -16,6 +17,7 @@ const AdminPanel = () => {
             <Sidebar />
             {activeTab === 'products' && <ProductList token={token} />}
             {activeTab === 'orders' && <AdminOrderList token={token} />}
+            {activeTab === 'customers' && <CustomerList token={token} />}
           </div>
         )}
       </div>
