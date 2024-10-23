@@ -5,12 +5,12 @@ const CustomerList = ({ token }) => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchCustomersWithOrders = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:5000/api/customers', {
+        const response = await fetch(`${apiUrl}/api/customers`, {
           headers: {
             Authorization: token,
           },
@@ -21,7 +21,7 @@ const CustomerList = ({ token }) => {
         const customersWithOrders = await Promise.all(
           customerData.map(async (customer) => {
             const ordersResponse = await fetch(
-              `http://localhost:5000/api/orders/user?user_id=${customer.id}`,
+              `${apiUrl}/api/orders/user?user_id=${customer.id}`,
               {
                 headers: {
                   Authorization: token,

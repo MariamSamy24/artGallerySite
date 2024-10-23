@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const ProductForm = ({ onAddProduct, token, onCancel, productId }) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [newProduct, setNewProduct] = useState({
     title: '',
     short_description: '',
@@ -16,7 +17,7 @@ const ProductForm = ({ onAddProduct, token, onCancel, productId }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       if (productId) {
-        const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+        const response = await fetch(`${apiUrl}/api/products/${productId}`, {
           headers: {
             Authorization: token,
           },
@@ -48,7 +49,7 @@ const ProductForm = ({ onAddProduct, token, onCancel, productId }) => {
 
     try {
       const method = productId ? 'PUT' : 'POST';
-      const response = await fetch(`http://localhost:5000/api/products${productId ? `/${productId}` : ''}`, {
+      const response = await fetch(`${apiUrl}/api/products${productId ? `/${productId}` : ''}`, {
         method,
         headers: {
           Authorization: token,

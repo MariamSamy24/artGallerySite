@@ -4,6 +4,7 @@ import ProductForm from './ProductForm';
 import Pagination from './Pagination';
 
 const ProductList = ({ token }) => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -29,7 +30,7 @@ const ProductList = ({ token }) => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:5000/api/products?page=${page}&limit=${rowsPerPage}`, 
+          `${apiUrl}/api/products?page=${page}&limit=${rowsPerPage}`, 
           {
             headers: {
               Authorization: token,
@@ -40,7 +41,7 @@ const ProductList = ({ token }) => {
         const data = await response.json();
         setProducts(data.products);
         const nextPageResponse = await fetch(
-          `http://localhost:5000/api/products?page=${page + 1}&limit=${rowsPerPage}`, 
+          `${apiUrl}/api/products?page=${page + 1}&limit=${rowsPerPage}`, 
           {
             headers: {
               Authorization: token,
@@ -79,10 +80,9 @@ const ProductList = ({ token }) => {
     setCurrentProductId(productId);
     setShowAddForm(true);
   };
-
   const handleDeleteProduct = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+      const response = await fetch(`${apiUrl}/api/products/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: token,
