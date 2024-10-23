@@ -1,5 +1,4 @@
 import Navbar from "./component/Navbar.js";
-import Shop from './pages/shop';
 import CheckoutPage from './pages/CheckoutPage.js';
 import HomePage from './pages/HomePage.js'; 
 import LoginPage from './pages/login/LoginPage.js';
@@ -10,6 +9,7 @@ import OrderHistory from "./component/OrderHistory.js";
 import SuccessPage from "./pages/ResponsePayment/SuccessPage.js";
 import CancelPage from "./pages/ResponsePayment/CancelPage.js";
 import AdminPanel from "./component/AdminPanel.js";
+import ProductPage from "./pages/product/ProductPage.js"
 import { AdminProvider } from "./component/AdminContext.js";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
@@ -26,7 +26,7 @@ function App() {
           <Routes>
             <Route index element={<HomePage />} />
             <Route path="home" element={<HomePage />} />
-            <Route path="shop" element={<Shop />} />
+            <Route path="shop" element={<ProductPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage/>} />
