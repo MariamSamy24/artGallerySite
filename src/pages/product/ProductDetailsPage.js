@@ -8,15 +8,13 @@ const ProductDetailsPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [quantity, setQuantity] = useState(1);
 
-  const apiUrl = process.env.REACT_APP_API_URL; 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`${apiUrl}/api/products/${id}`);
-        debugger
         setProduct(response.data);
         setLoading(false);
       } catch (error) {
@@ -36,12 +34,12 @@ const ProductDetailsPage = () => {
     return <div>Product not found.</div>;
   }
 
-
+  
 
   return (
     <div className="container p-6 mx-auto">
-      <div className="flex">
-        <div className="w-1/2">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full mb-6 md:w-1/2 md:mb-0">
           <img
             src={product.imageUrl} 
             alt={product.name}
@@ -49,16 +47,18 @@ const ProductDetailsPage = () => {
           />
         </div>
 
-        <div className="w-1/2 pl-8">
-          <h1 className="mb-4 text-3xl font-bold">{product.name}</h1>
-          <p className="mb-4 text-lg">{product.description}</p>
+        <div className="w-full md:w-1/2 md:pl-8">
+          <h1 className="mb-4 text-2xl font-bold md:text-3xl">{product.name}</h1>
+          <p className="mb-4 text-base md:text-lg">{product.description}</p>
 
-          <p className="mb-2 text-xl font-semibold">Price: ${product.price}</p>
+          <p className="mb-2 text-lg font-semibold md:text-xl">Price: ${product.price}</p>
           <p className={`text-lg mb-4 ${product.stock > 0 ? 'text-green-700' : 'text-red-500'}`}>
             {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
           </p>
 
-          <AddToCartButton product={product} className="add-to-cart-btn"/>
+          <div className="mt-4">
+            <AddToCartButton product={product} className="add-to-cart-btn"/>
+          </div>
         </div>
       </div>
     </div>
