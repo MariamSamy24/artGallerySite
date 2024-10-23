@@ -10,29 +10,31 @@ const CustomerList = ({ token }) => {
     const fetchCustomersWithOrders = async () => {
       setLoading(true);
       try {
-        // Fetch customers
-        const customersResponse = await fetch('http://localhost:5000/api/customers', {
+        const response = await fetch('http://localhost:5000/api/customers', {
           headers: {
             Authorization: token,
           },
         });
-        if (!customersResponse.ok) throw new Error('Error fetching customers');
-        const customerData = await customersResponse.json();
+        if (!response.ok) throw new Error('Error fetching customers');
+        const customerData = await response.json();
 
-        // Fetch orders
-        const ordersResponse = await fetch('http://localhost:5000/api/orders', {
-          headers: {
-            Authorization: token,
-          },
-        });
-        if (!ordersResponse.ok) throw new Error('Error fetching orders');
-        const { orders } = await ordersResponse.json();
-
-        // Map orders to the respective customers
-        const customersWithOrders = customerData.map((customer) => {
-          const customerOrders = orders.filter(order => order.user_id === customer.id);
-          return { ...customer, orders: customerOrders };
-        });
+        const customersWithOrders = await Promise.all(
+          customerData.map(async (customer) => {
+            const ordersResponse = await fetch(
+              `http://localhost:5000/api/orders/user?user_id=${customer.id}`,
+              {
+                headers: {
+                  Authorization: token,
+                },
+              }
+            );
+            if (!ordersResponse.ok) {
+              throw new Error(`Error fetching orders for customer ${customer.id}`);
+            }
+            const orders = await ordersResponse.json();
+            return { ...customer, orders: orders.orders };
+          })
+        );
 
         setCustomers(customersWithOrders);
       } catch (error) {
@@ -41,7 +43,7 @@ const CustomerList = ({ token }) => {
         setLoading(false);
       }
     };
-    
+
     fetchCustomersWithOrders();
   }, [token]);
 
