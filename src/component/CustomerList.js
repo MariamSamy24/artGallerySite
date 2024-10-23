@@ -32,7 +32,7 @@ const CustomerList = ({ token }) => {
               throw new Error(`Error fetching orders for customer ${customer.id}`);
             }
             const orders = await ordersResponse.json();
-            return { ...customer, orders: orders.orders };
+            return { ...customer, orders };
           })
         );
 
