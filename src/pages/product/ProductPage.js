@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom'; 
+import { useLocation } from 'react-router-dom';
 import './ProductPage.css';
 import AddToCartButton from '../../component/AddToCartButton';
 
@@ -15,7 +15,7 @@ function ProductPage() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  const location = useLocation(); 
+  const location = useLocation();
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -54,7 +54,7 @@ function ProductPage() {
 
   useEffect(() => {
     fetchCategories();
-    
+
     const searchQueryFromState = location.state?.searchQuery || '';
     if (searchQueryFromState) {
       setSearchQuery(searchQueryFromState);
@@ -63,21 +63,19 @@ function ProductPage() {
     fetchProducts();
   }, [searchQuery, currentPage, selectedCategory]);
 
-
-  
   const renderProducts = () => {
     if (products.length === 0) {
       return <p>No products found</p>;
     }
     return products.map((product) => (
       <div key={product.id} className="product-card">
-        <a  href={`/shop/${product.id}`}>
+        <a href={`/shop/${product.id}`}>
           <img src={product.imageUrl} alt={product.title} className="product-image" />
           <h3>{product.title}</h3>
           <p>{product.short_description}</p>
           <p>Price: ${product.price}</p>
         </a>
-          <AddToCartButton product={product} className="add-to-cart-btn"/>
+        <AddToCartButton product={product} className="add-to-cart-btn" />
       </div>
     ));
   };
@@ -117,83 +115,89 @@ function ProductPage() {
   };
 
   return (
-  <div>
-    <div className="product-page">
-      <div className="filter-section">
-        <input className="search-input"
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+    <div>
+      <div className="product-page">
+        <div className="filter-section">
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
 
-        <div className="category-filter">
-          <h4>Category</h4>
-          <label className="category-item">
-            <input
-              type="radio"
-              value=""
-              checked={selectedCategory === ''}
-              onChange={() => setSelectedCategory('')}
-            />
-            All Categories
-          </label>
-          {categories.map((category, index) => (
-            <label key={index} className="category-option">
+          <div className="category-filter">
+            <h4>Category</h4>
+            <label className="category-item">
               <input
                 type="radio"
-                name="category"
-                value={category}
-                checked={selectedCategory === category}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                value=""
+                checked={selectedCategory === ''}
+                onChange={() => setSelectedCategory('')}
               />
-              {category}
+              All Categories
             </label>
-          ))}
+            {categories && categories.length > 0 ? (
+              categories.map((category, index) => (
+                <label key={index} className="category-option">
+                  <input
+                    type="radio"
+                    name="category"
+                    value={category}
+                    checked={selectedCategory === category}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  />
+                  {category}
+                </label>
+              ))
+            ) : (
+              <p>No categories available</p>
+            )}
+          </div>
+
+          <div className="price-filter">
+            <h4>Price Range</h4>
+            <div className="price-range-values">
+              <span>Min: ${minPrice}</span>
+              <span>Max: ${maxPrice}</span>
+            </div>
+            <div className="range-slider">
+              <div
+                className="rangeValues"
+                style={{
+                  left: `${(minPrice / 5000) * 100}%`,
+                  width: `${((maxPrice - minPrice) / 5000) * 100}%`,
+                }}
+              ></div>
+
+              <input
+                type="range"
+                min="0"
+                max="5000"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                onMouseUp={fetchProducts}
+                onTouchEnd={fetchProducts}
+              />
+              <input
+                type="range"
+                min="0"
+                max="5000"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                onMouseUp={fetchProducts}
+                onTouchEnd={fetchProducts}
+              />
+            </div>
+          </div>
         </div>
 
-
-        <div className="price-filter">
-          <h4>Price Range</h4>
-          <div className="price-range-values">
-            <span>Min: ${minPrice}</span>
-            <span>Max: ${maxPrice}</span>
-          </div>
-          <div className="range-slider">
-            <div className="rangeValues"
-              style={{
-                left: `${(minPrice / 5000) * 100}%`,
-                width: `${((maxPrice - minPrice) / 5000) * 100}%`,
-              }}
-            ></div>
-
-            <input type="range"
-              min="0"
-              max="5000"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              onMouseUp={fetchProducts}
-              onTouchEnd={fetchProducts}
-            />
-            <input type="range"
-              min="0"
-              max="5000"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              onMouseUp={fetchProducts}
-              onTouchEnd={fetchProducts}
-            />
-          </div>
+        <div className="product-list">
+          {renderLoading()}
+          {renderProducts()}
         </div>
-      </div>
-
-      <div className="product-list">
-        {renderLoading()}
-        {renderProducts()}
-      </div>
       </div>
       {renderPagination()}
-
     </div>
   );
 }
