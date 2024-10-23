@@ -24,7 +24,7 @@ const CustomerTable = ({ customers }) => {
                 <ul>
                   {customer.orders.map((order, index) => (
                     <li key={index}>
-                      Order ID: {order.id}, Total: {order.total}
+                      Order ID: {order.id}, Total: {order.total_amount}, Date: {new Date(order.order_date).toLocaleDateString()}, Status: {order.status}
                     </li>
                   ))}
                 </ul>
