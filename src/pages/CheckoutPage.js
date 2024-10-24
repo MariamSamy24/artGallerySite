@@ -9,48 +9,10 @@ function CheckoutPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('/api/user');
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
 
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get('/api/cart');
-        setCartItems(response.data);
-      } catch (error) {
-        console.error('Error fetching cart items:', error);
-      }
-    };
-
-    const fetchPaymentMethods = async () => {
-      try {
-        const response = await axios.get('/api/payment-methods');
-        setPaymentMethods(response.data);
-      } catch (error) {
-        console.error('Error fetching payment methods:', error);
-      }
-    };
-
-    fetchUserData();
-    fetchCartItems();
-    fetchPaymentMethods();
   }, []);
 
-  const handleCheckout = async (checkoutData) => {
-    try {
-      const response = await axios.post('/api/checkout', checkoutData);
 
-      // Handle successful checkout
-      console.log('Checkout successful:', response.data);
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  };
 
   return (
     <div>
@@ -66,7 +28,7 @@ function CheckoutPage() {
           </li>
         ))}
       </ul>
-      <CheckoutForm onSubmit={handleCheckout} />
+      <CheckoutForm  />
       {error && <p>{error}</p>}
     </div>
   );
