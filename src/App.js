@@ -1,5 +1,5 @@
 import Navbar from "./component/Navbar.js";
-import CheckoutPage from './pages/CheckoutPage.js';
+import CheckoutForm from './component/CheckoutForm.js';
 import HomePage from './pages/HomePage.js'; 
 import LoginPage from './pages/login/LoginPage.js';
 import RegisterPage from "./pages/register/RegisterPage.js";
@@ -29,7 +29,7 @@ function App() {
             <Route path="home" element={<HomePage />} />
             <Route path="shop" element={<ProductPage />} />
             <Route path="shop/:id" element={<ProductDetailsPage />} />
-            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="checkout" element={<CheckoutForm />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage/>} />
             <Route path="cart" element={<CartPage/>} />

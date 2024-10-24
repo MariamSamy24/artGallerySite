@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import CheckoutForm from '../component/CheckoutForm';
 
 function CheckoutPage() {
   const [user, setUser] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [paymentMethods, setPaymentMethods] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-
-  }, []);
-
 
 
   return (
@@ -29,7 +21,6 @@ function CheckoutPage() {
         ))}
       </ul>
       <CheckoutForm  />
-      {error && <p>{error}</p>}
     </div>
   );
 }
