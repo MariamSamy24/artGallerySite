@@ -92,9 +92,11 @@ function CheckoutForm() {
     setLoading(true);
     if (paymentMethod === 'Cash') {
       handleCashPayment();
-    } else if (paymentMethod === 'Stripe') {
+    }
+     else if (paymentMethod === 'Stripe') {
       handleStripePayment();
-    } else {
+    }
+     else {
       toast.info(`Please select a payment method`);
     }
   };
@@ -133,7 +135,7 @@ function CheckoutForm() {
         <select id="payment-method" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} required>
           <option value="">Select Payment Method</option>
           <option value="Cash">Cash on Delivery</option>
-          <option value="Stripe">Credit Card (Stripe)</option>
+          { <option value="Stripe">Credit Card (Stripe)</option> }
         </select>
 
         <button type="submit" disabled={loading}>

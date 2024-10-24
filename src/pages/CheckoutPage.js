@@ -21,7 +21,7 @@ function CheckoutPage() {
     const fetchCartItems = async () => {
       try {
         const response = await axios.get('/api/cart');
-        console.log(response.data); // تسجيل استجابة API للتحقق من البيانات
+        console.log(response.data);
         setCartItems(response.data);
       } catch (error) {
         console.error('Error fetching cart items:', error);
