@@ -16,13 +16,13 @@ function CheckoutPage() {
 
   return (
     <div>
-      {/* <h2>Checkout</h2>
+      <h2>Checkout</h2>
       <h3>User Information</h3>
       <p>Name: {user?.name}</p>
       <p>ID: {user?.id}</p>
-      <h3>Cart Items</h3> */}
+      <h3>Cart Items</h3>
       <ul>
-        {cartItems.map((item) => (
+        {(Array.isArray(cartItems) ? cartItems : []).map((item) => (
           <li key={item.id}>
             {item.product.name} - Quantity: {item.quantity}
           </li>
