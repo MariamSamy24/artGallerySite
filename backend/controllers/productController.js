@@ -25,7 +25,6 @@ const validateProduct = [
 
 
 exports.getAllProducts = async (req, res) => {
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
   try {
     const page = parseInt(req.query.page) || 1; 
     const limit = parseInt(req.query.limit) || 100; 
@@ -35,7 +34,7 @@ exports.getAllProducts = async (req, res) => {
     const productsWithImageUrl = products.map(product => {
       return {
         ...product,
-        imageUrl: product.image ? `${baseUrl}/${product.image}` : null
+        imageUrl: product.image 
       };
     });
     res.status(200).json({
@@ -52,7 +51,6 @@ exports.getAllProducts = async (req, res) => {
 
   exports.getProductById = async (req, res) => {
     const { id } = req.params;
-    const baseUrl = `${req.protocol}://${req.get('host')}`; 
   
     try {
       const product = await Product.getById(id);
@@ -63,7 +61,7 @@ exports.getAllProducts = async (req, res) => {
   
       const productWithImageUrl = {
         ...product,
-        imageUrl: product.image ? `${baseUrl}/${product.image}` : null
+        imageUrl: product.image 
       };
   
       res.status(200).json(productWithImageUrl);
@@ -145,13 +143,12 @@ exports.updateProduct = [validateProduct, async (req, res) => {
       const limit = parseInt(req.query.limit) || 100; 
       const offset = (page - 1) * limit;
   
-      const baseUrl = `${req.protocol}://${req.get('host')}`;
 
       const { products, total } = await Product.searchProducts(q || '', category, minprice, maxprice,limit, offset);
       const productsWithImageUrl = products.map(product => {
         return {
           ...product,
-          imageUrl: product.image ? `${baseUrl}/${product.image}` : null 
+          imageUrl: product.image ? `${product.image}` : null 
         };
       });
 

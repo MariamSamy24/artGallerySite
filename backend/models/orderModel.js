@@ -7,7 +7,7 @@ class Order {
     const [rows] = await db.execute("SELECT * FROM orders ORDER  BY order_date DESC");
     return rows;
   }
-  static async getAllByUserId(user_id, fromDate, toDate, status, baseUrl) {
+  static async getAllByUserId(user_id, fromDate, toDate, status) {
     let query = `
       SELECT orders.*, order_details.id order_detail_id, order_details.quantity, order_details.price, title, image
       FROM orders 
@@ -53,7 +53,7 @@ class Order {
         
         if (row.order_detail_id) {
             existingOrder.order_details.push({
-                imageUrl: `${baseUrl}/${row.image}`,
+                imageUrl: `${row.image}`,
                 title: row.title,
                 quantity: row.quantity,
                 price: row.price
