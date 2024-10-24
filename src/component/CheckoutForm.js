@@ -62,39 +62,41 @@ function CheckoutForm() {
     }
   };
 
-  const handleStripePayment = async () => {
-    if (paymentMethod === 'Stripe') {
-      const orderData = GetOrderData();
-      localStorage.setItem('orderData', JSON.stringify(orderData));
-      const response = await fetch( apiUrl+ '/api/payments/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ items: cart }),
-      });
+  // const handleStripePayment = async () => {
+  //   if (paymentMethod === 'Stripe') {
+  //     const orderData = GetOrderData();
+  //     localStorage.setItem('orderData', JSON.stringify(orderData));
+  //     const response = await fetch( apiUrl+ '/api/payments/create-checkout-session', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ items: cart }),
+  //     });
   
-      const session = await response.json();
-      const stripe = window.Stripe(process.env.REACT_APP_STRIPE_PUBLISHER);
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: session.id, 
-      });
+  //     const session = await response.json();
+  //     const stripe = window.Stripe(process.env.REACT_APP_STRIPE_PUBLISHER);
+  //     const { error } = await stripe.redirectToCheckout({
+  //       sessionId: session.id, 
+  //     });
       
-      setLoading(false);
-      if (error) {
-        console.error("Error redirecting to checkout:", error);
-      }
-    }
-  };
+  //     setLoading(false);
+  //     if (error) {
+  //       console.error("Error redirecting to checkout:", error);
+  //     }
+  //   }
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     if (paymentMethod === 'Cash') {
       handleCashPayment();
-    } else if (paymentMethod === 'Stripe') {
-      handleStripePayment();
-    } else {
+    }
+    //  else if (paymentMethod === 'Stripe') {
+    //   handleStripePayment();
+    // }
+     else {
       toast.info(`Please select a payment method`);
     }
   };
@@ -133,7 +135,7 @@ function CheckoutForm() {
         <select id="payment-method" value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} required>
           <option value="">Select Payment Method</option>
           <option value="Cash">Cash on Delivery</option>
-          <option value="Stripe">Credit Card (Stripe)</option>
+          {/* <option value="Stripe">Credit Card (Stripe)</option> */}
         </select>
 
         <button type="submit" disabled={loading}>
